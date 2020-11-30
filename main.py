@@ -16,7 +16,7 @@ def update_sensor_job(sensor: Sensor):
 if __name__ == "__main__":
 
     uuid = "7dfff801-4e6c-5a3e-9bd0-d6cefa79e17a" 
-    sensor = Sensor(uuid, webdriver_path, headless=False)
+    sensor = Sensor(uuid, webdriver_path)
 
     schedule.every(5).minutes.do(update_sensor_job, sensor)
 
