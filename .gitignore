@@ -1,3 +1,4 @@
 webdriver/*.exe
 .vscode/
 __pycache__/
+*.xlsx

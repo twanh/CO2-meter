@@ -23,7 +23,7 @@ class Sensor:
     self._last_update = datetime.now() 
 
     # Update the data when initialized
-    self._update_data()
+    # self._update_data()
 
 
   def update_now(self):
