@@ -18,6 +18,22 @@
   - Place `chromedriver.exe` in the `webdriver` folder.
 - Run with `python main.py`
 
+## Usage:
+
+Run: `python main.py [uuid] [output] [interval]`
+
+```
+usage: main.py [-h] uuid output interval
+
+positional arguments:
+  uuid        De UUID van de sensor
+  output      Het excel bestand waarin de metingen moeten worden opgeslagen
+  interval    De interval tussen de metingen
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
 # Notes:
 
 - Sensor url: https://pulse.strukton.com/comfortsensor/7dfff801-4e6c-5a3e-9bd0-d6cefa79e17a
@@ -27,16 +43,16 @@
 ## Element IDS:
 
 - Temperature:
-  - idTempValue1
-  - idTempValue2
+  - `idTempValue1`
+  - `idTempValue2`
 - Humidity (luchvochtigheid)
-  - idHumValue1
-  - idHumValue2
+  - `idHumValue1`
+  - `idHumValue2`
 - Air Qualitity (Luch Kwaliteit)
-  - idCooValue1
-  - idCooValue2
-  - idCooValue3
-  - idCooValue4
+  - `idCooValue1`
+  - `idCooValue2`
+  - `idCooValue3`
+  - `idCooValue4`
 
 ## Iframe Source:
 

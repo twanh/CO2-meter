@@ -1,5 +1,6 @@
 import os
 import time
+import argparse
 from datetime import datetime
 import schedule 
 import pandas as pd
@@ -8,11 +9,15 @@ from sensor import Sensor
 
 # CONSTANTS
 EXCEL_FILE_NAME = 'data_test.xlsx'
-UPDATE_INTERVAL = 1 # minutej
+UPDATE_INTERVAL = 1 # minuten
 SENSOR_UUID = "7dfff801-4e6c-5a3e-9bd0-d6cefa79e17a" 
 
 webdriver_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "webdriver", "chromedriver.exe") 
 
+arguments_parser = argparse.ArgumentParser()
+arguments_parser.add_argument('uuid', help="De UUID van de sensor")
+arguments_parser.add_argument('output',  help="Het excel bestand waarin de metingen moeten worden opgeslagen")
+arguments_parser.add_argument("interval",  default=5, help="De interval tussen de metingen")
 
 def create_excel_sheet():
   if os.path.isfile(EXCEL_FILE_NAME):
@@ -60,11 +65,13 @@ def update_sensor_job(sensor: Sensor):
 
 if __name__ == "__main__":
 
+    args = arguments_parser.parse_args()
+    EXCEL_FILE_NAME = args.output
     print("Starting...")
 
-    sensor = Sensor(SENSOR_UUID, webdriver_path)
+    sensor = Sensor(args.uuid, webdriver_path)
 
-    schedule.every(UPDATE_INTERVAL).minutes.do(update_sensor_job, sensor)
+    schedule.every(int(args.interval)).minutes.do(update_sensor_job, sensor)
 
     create_excel_sheet()
 
