@@ -2,17 +2,15 @@ import os
 import time
 import argparse
 from datetime import datetime
-import schedule 
+import schedule
 import pandas as pd
 from openpyxl import load_workbook
 from sensor import Sensor
 
 # CONSTANTS
 EXCEL_FILE_NAME = 'data_test.xlsx'
-UPDATE_INTERVAL = 1 # minuten
-SENSOR_UUID = "7dfff801-4e6c-5a3e-9bd0-d6cefa79e17a" 
 
-webdriver_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "webdriver", "chromedriver.exe") 
+webdriver_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "webdriver", "chromedriver.exe")
 
 arguments_parser = argparse.ArgumentParser()
 arguments_parser.add_argument('uuid', help="De UUID van de sensor")
@@ -25,20 +23,21 @@ def create_excel_sheet():
     return
   print("Creating excel file with name: ", EXCEL_FILE_NAME)
   df = pd.DataFrame({
-    "tijd (s)": [],
+    "tijd (HH:MM:SS)": [],
     'temperatuur (celcius)': [],
     'luchtvochtigheid (%)': [],
     'luchkwaliteit (ppm)': [],
   })
-  writer = pd.ExcelWriter(EXCEL_FILE_NAME, engine="xlsxwriter")
+  writer = pd.ExcelWriter(EXCEL_FILE_NAME, engine="openpyxl")
   # writer.save()
   df.to_excel(writer, header=True, startcol=0)
   writer.close()
+  print("Done!")
 
 def update_excel_sheet(time: str, temp: int, hum: int, aq: int):
   print('Updating excel sheet...')
   df = pd.DataFrame({
-    'tijd (s)': [time],
+    'tijd (HH:MM:SS)': [time],
     'temperatuur (celcius)': [temp],
     'luchtvochtigheid (%)': [hum],
     'luchkwaliteit (ppm)': [aq],
@@ -54,7 +53,7 @@ def update_excel_sheet(time: str, temp: int, hum: int, aq: int):
   print("Done!")
 
 def update_sensor_job(sensor: Sensor):
-  cur_time = datetime.now() 
+  cur_time = datetime.now()
   cur_time_str = cur_time.strftime("%H:%M:%S")
   print(f"\n\nUpdating the sensor @ {cur_time_str}")
   temp, hum, aq = sensor.update_now()
@@ -79,7 +78,7 @@ if __name__ == "__main__":
     running = True
     while running:
       try:
-        schedule.run_pending() 
+        schedule.run_pending()
         time.sleep(1)
       except KeyboardInterrupt:
         running = False

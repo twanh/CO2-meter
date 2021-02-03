@@ -2,3 +2,5 @@ webdriver/*.exe
 .vscode/
 __pycache__/
 *.xlsx
+build/
+dist/
