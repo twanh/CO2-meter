@@ -7,11 +7,12 @@ from datetime import datetime
 
 class Sensor:
 
-  def __init__(self, uuid: str, webdriver_path: str, headless=True):
+  def __init__(self, uuid: str, webdriver_path: str, headless=True, metadata={}):
 
-    url = f"https://pulse.strukton.com/comfortsensor/{uuid}"
-    self._url = url
-    self._uuid = uuid 
+    self._uuid = uuid
+    self._url = f"https://pulse.strukton.com/comfortsensor/{uuid}"
+    # Can be used for storing the room number, etc...
+    self._metadata = metadata
 
     self._webdriver_path = webdriver_path
     self._driver_options = webdriver.ChromeOptions() 
@@ -24,6 +25,17 @@ class Sensor:
 
     # Update the data when initialized
     # self._update_data()
+
+  def __str__(self): 
+    if 'room_number' in self._metadata:
+      return f"Sensor with uuid: {self._uuid} for room: {self._metadata['room_number']}"
+    return f"Sensor with uuid: {self._uuid}"
+
+  def __repr__(self):
+    if 'room_number' in self._metadata:
+      return f"<Sensor: {self._uuid} - {self._metadata['room_number']}>"
+    return f"<Sensor: {self._uuid}>"
+
 
 
   def update_now(self):
@@ -103,7 +115,9 @@ class Sensor:
         int: The air humidity in % 
     """
     if len(self._onload_args) < 1:
-      return 0# The humidity value is the 5th element in the onload_args array
+      return 0
+
+    # The humidity value is the 5th element in the onload_args array
     # The first and last character are quotation marks, so these need to
     # be removed
     return int(self._onload_args[5][1:-1])
@@ -116,7 +130,9 @@ class Sensor:
         int: The air quality in ppm
     """
     if len(self._onload_args) < 1:
-      return 0# The air quality value is the 7th element in the onload_args array
+      return 0
+
+    # The air quality value is the 7th element in the onload_args array
     # The first and last character are quotation marks, so these need to
     # be removed and there is alse a ) at the end.
     return int(self._onload_args[7][1:-2])

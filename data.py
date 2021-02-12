@@ -15,6 +15,7 @@ class ExcelSheet:
         }
 
     def _create(self):
+
         # Check if the the file already exists
         if os.path.isfile(self.file_name):
             print(f"{self.file_name} already exists.")
@@ -22,9 +23,9 @@ class ExcelSheet:
         # If not create the file
         df = pd.DataFrame(self.headers)
 
-       writer = pd.ExcelWriter(self.file_name, engine="openpyxl")
-       df.to_excel(writer, header=True, startcol=0)
-       writer.close()
+        writer = pd.ExcelWriter(self.file_name, engine="openpyxl")
+        df.to_excel(writer, header=True, startcol=0)
+        writer.close()
 
     def update(room: str, time: str, temp: int, hum: int, aq: int):
         print("Updating excel sheet")
