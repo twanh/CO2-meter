@@ -7,7 +7,7 @@
 - Periodicly check the value's of the sensor
 - Store the value's of the sensor
 - Export the values to an excel sheet
-- View graphs about the data (data visualization)
+
 
 ## Installation:
 
