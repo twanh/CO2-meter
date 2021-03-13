@@ -2,3 +2,6 @@ webdriver/*.exe
 .vscode/
 __pycache__/
 *.xlsx
+.vim/
+.venv/
+
