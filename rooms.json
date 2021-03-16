@@ -1,0 +1,36 @@
+{
+  "rooms": [
+    {
+      "number": 150,
+      "uuid": "f688c2be-018c-5bf8-8a80-3704d29049a6"
+    },
+    {
+      "number": 153,
+      "uuid": "525057eb-5849-5e35-833c-d24361e47726"
+    },
+    {
+      "number": 173,
+      "uuid": "6e560cb3-7851-5983-a6e5-6357f6f0887d"
+    },
+    {
+      "number": 171,
+      "uuid": "5ab62dc4-7f01-5151-bf74-19c6cb86b0d3"
+    },
+    {
+      "number": 250,
+      "uuid": "3b43f186-c1da-5efb-a0e8-a0e1bc8cee95"
+    },
+    {
+      "number": 253,
+      "uuid": "26db14de-3265-57d5-b620-bf00029b4765"
+    },
+    {
+      "number": 275,
+      "uuid": "7dfff801-4e6c-5a3e-9bd0-d6cefa79e17a"
+    },
+    {
+      "number": 276,
+      "uuid": "8cdbc682-c5d4-50c5-8ce6-09c7b049eb58"
+    }
+  ]
+}
