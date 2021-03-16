@@ -34,3 +34,8 @@ class Sensor(Base):
             "air_quality": self.air_quality,
             "notes": self.notes,
         }
+
+
+
+    def __str__(self):
+        return f"Sensor with uuid: {self.uuid} in room#: {self.room_number}"
