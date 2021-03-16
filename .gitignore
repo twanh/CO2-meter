@@ -4,4 +4,4 @@ __pycache__/
 *.xlsx
 .vim/
 .venv/
-
+*.pyc
