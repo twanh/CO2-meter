@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -57,7 +57,7 @@ class Temperature(Base):
     __tablename__ = "temperatures"
 
     id = Column(Integer, primary_key=True, index=True)
-    value = Column(Float, nullable=True)
+    value = Column(Integer, nullable=True)
     created_add = Column(DateTime, default=datetime.datetime.now)
     sensor_id = Column(Integer, ForeignKey("sensors.id"))
 
@@ -75,7 +75,7 @@ class Humidity(Base):
     __tablename__ = "humidities"
 
     id = Column(Integer, primary_key=True, index=True)
-    value = Column(Float, nullable=True)
+    value = Column(Integer, nullable=True)
     created_add = Column(DateTime, default=datetime.datetime.now)
     sensor_id = Column(Integer, ForeignKey("sensors.id"))
 
@@ -93,7 +93,7 @@ class AirQuality(Base):
     __tablename__ = "air_qualities"
 
     id = Column(Integer, primary_key=True, index=True)
-    value = Column(Float, nullable=True)
+    value = Column(Integer, nullable=True)
     created_add = Column(DateTime, default=datetime.datetime.now)
     sensor_id = Column(Integer, ForeignKey("sensors.id"))
 
