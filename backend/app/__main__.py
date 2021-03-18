@@ -19,11 +19,11 @@ flask_app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack.__iden
 
 flask_app.config.update(
     # Celery settings
-    CELERY_BROKER_URL='amqp://admin:mypass@localhost:5672',
+    CELERY_BROKER_URL='amqp://admin:mypass@rabbit:5672',
     # TODO: remove deprecacted
     result_backend='rpc://',
     # Custom settings
-    WEBDRIVER_URL = "http://localhost:4444",
+    WEBDRIVER_URL = "http://selenium-hub:4444",
 )
 # Make celery availble on current_app
 celery = create_celery(flask_app) 

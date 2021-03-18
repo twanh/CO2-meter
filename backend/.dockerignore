@@ -1,0 +1,5 @@
+celerybeat-schedule
+celerybeat
+__pycache__/
+.venv/
+

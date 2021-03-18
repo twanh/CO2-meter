@@ -1,13 +1,5 @@
 version: "3.7"
 services:
-
-#   django:
-#     build: './flask_app'
-#     ports:
-#       - "5000:5000"
-#     depends_on:
-#       - rabbit
-
   rabbit:
     hostname: rabbit
     image: "rabbitmq:3-management"
@@ -19,7 +11,6 @@ services:
       - "5672:5672"
   selenium-hub:
     image: selenium/hub:4.0.0-beta-2-prerelease-20210312
-    container_name: selenium-hub
     ports:
       - "4442:4442"
       - "4443:4443"
@@ -38,10 +29,10 @@ services:
       - "6900:5900"
   postgres:
     image: postgres:12.3-alpine
-    restart: always
+    restart: unless-stopped 
     environment:
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
     volumes:
         - postgres:/var/lib/postgresql/data
     ports:
@@ -59,6 +50,36 @@ services:
         - pgadmin:/var/lib/pgadmin
     depends_on:
         - postgres
+
+  flask_app:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - selenium-hub
+      - rabbit
+    ports:
+      - 8008:8008 
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-worker
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - selenium-hub
+      - rabbit
+
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-beat
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - selenium-hub
+      - rabbit
 
 volumes:
     postgres:
