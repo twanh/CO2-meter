@@ -21,7 +21,7 @@ flask_app.config.update(
     # Celery settings
     CELERY_BROKER_URL='amqp://admin:mypass@localhost:5672',
     # TODO: remove deprecacted
-    CELERY_RESULT_BACKEND='rpc://',
+    result_backend='rpc://',
     # Custom settings
     WEBDRIVER_URL = "http://localhost:4444",
 )

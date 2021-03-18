@@ -125,3 +125,13 @@ def update_sensor(self, uuid: str):
         "humidity": hum,
         "air_quality": aq,
     }
+
+
+@celery.task
+def update_all_sensors():
+    logger.info("Updating all sensors...")
+    all_sensors = current_app.session.query(models.Sensor).all()
+
+    for sensor in all_sensors:
+        logger.info(f"Added sensor {sensor.uuid} to queue")
+        update_sensor.delay(sensor.uuid)
