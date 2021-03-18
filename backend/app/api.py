@@ -1,10 +1,11 @@
-from flask import Blueprint, current_app, request
-from flask import jsonify
+from flask import Blueprint, current_app, json, request
+from flask import jsonify, url_for
 from celery.result import AsyncResult
 
 from . import models
 
 bp = Blueprint("api", __name__, url_prefix="/api/v1")
+
 
 @bp.route("/sensors")
 def get_all_sensors():
@@ -29,6 +30,10 @@ def add_sensor():
 
 @bp.route("/sensors/<string:uuid>", methods=["GET"])
 def get_sensor_info(uuid: str):
+
+    # TODO:
+    # - Allow for getting the results from a certain date range
+
     results = current_app.session.query(models.Sensor).filter(
         models.Sensor.uuid == uuid
     )
@@ -39,18 +44,31 @@ def get_sensor_info(uuid: str):
     return jsonify({"sensor": results.first().toJSON(show_stats=True)})
 
 
-@bp.route("/do")
-def test():
+@bp.route("/sensors/<string:uuid>/update", methods=["GET"])
+def update_sensor(uuid):
     # Imoprting here to prevent circular imports
-    from .tasks import update_sensor 
+    from .tasks import update_sensor
 
-    task = update_sensor.delay("f688c2be-018c-5bf8-8a80-3704d29049a6")
-    return task.id
+    # Check that the sensor exists
+    results = current_app.session.query(models.Sensor).filter(
+        models.Sensor.uuid == uuid
+    )
+
+    if results.first() is None:
+        return jsonify({"error": "sensor not found"}), 404
+
+    task = update_sensor.delay(uuid)
+
+    return jsonify({
+        "task_id": task.id,
+        "result_url": url_for('api.get_result', id=task.id)
+    })
 
 
-@bp.route("/result/<string:id>")
+@bp.route("/results/<string:id>")
 def get_result(id: str):
-    from .tasks import update_sensor 
+    from .tasks import update_sensor
+
     res = update_sensor.AsyncResult(id)
 
     if res.state == "SUCCESS":
