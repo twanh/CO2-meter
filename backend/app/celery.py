@@ -20,9 +20,8 @@ def create_celery(app):
 
     celery.conf.beat_schedule = {
         'update-all-sensors-every-10-min': {
-            # 'task': 'update_all_sensors',
             'task': 'app.tasks.update_all_sensors',
-            'schedule': 5*60 # 5 minutes 
+            'schedule': 10*60 # 10 minutes 
         }
     }
 
