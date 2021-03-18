@@ -32,7 +32,7 @@ def update_sensor(self, uuid: str):
         command_executor=current_app.config["WEBDRIVER_URL"],
     )
 
-    logger.info("Connected to the webdriver")
+    logger.debug("Connected to the webdriver")
 
     # Get the URL - Load the page
     logger.debug(f"Getting url: {sensor_url}")
@@ -58,6 +58,7 @@ def update_sensor(self, uuid: str):
         raise self.retry(exc=e, countdown=60)
 
     # Close the connection to the webdriver
+    logger.debug("Closing connection to the webdriver")
     driver.quit()
 
     logger.debug(f"Onload value: {onload_value}")
@@ -106,11 +107,9 @@ def update_sensor(self, uuid: str):
         return {
             "error": f"Could not update sensor with uuid: {uuid}",
             "uuid": uuid,
-            "result": {
-                "temperature": temp,
-                "humidity": hum,
-                "air_quality": aq,
-            },
+            "temperature": temp,
+            "humidity": hum,
+            "air_quality": aq,
         }
 
     new_temp = models.Temperature(value=temp, sensor=sensor)
@@ -120,22 +119,9 @@ def update_sensor(self, uuid: str):
     current_app.session.add_all([new_temp, new_hum, new_aq])
     current_app.session.commit()
 
-
-
     return {
         "uuid": uuid,
-        "result": {
-            "temperature": temp,
-            "humidity": hum,
-            "air_quality": aq,
-        },
+        "temperature": temp,
+        "humidity": hum,
+        "air_quality": aq,
     }
-
-
-@celery.task
-def do_something(x, y):
-    logger.info("GOT REQUEST")
-    time.sleep(3)
-    logger.info("DONE!")
-    raise FileNotFoundError("NOT FOUND")
-    # return [x + y, x + y, {"hi": "hello"}]

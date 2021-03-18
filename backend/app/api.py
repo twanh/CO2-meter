@@ -50,8 +50,8 @@ def test():
 
 @bp.route("/result/<string:id>")
 def get_result(id: str):
-    from .tasks import do_something
-    res = do_something.AsyncResult(id)
+    from .tasks import update_sensor 
+    res = update_sensor.AsyncResult(id)
 
     if res.state == "SUCCESS":
         return jsonify(
