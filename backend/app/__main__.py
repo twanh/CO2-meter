@@ -6,6 +6,7 @@ from sqlalchemy.orm import scoped_session
 
 from . import models
 from .database import SessionLocal, engine
+from .celery import create_celery
 # from .tasks import *
 
 models.Base.metadata.create_all(bind=engine) #type: ignore
@@ -17,20 +18,21 @@ flask_app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack.__iden
 # CELERY SETUP
 
 flask_app.config.update(
+    # Celery settings
     CELERY_BROKER_URL='amqp://admin:mypass@localhost:5672',
-    CELERY_RESULT_BACKEND='rpc://'
+    # TODO: remove deprecacted
+    CELERY_RESULT_BACKEND='rpc://',
+    # Custom settings
+    WEBDRIVER_URL = "http://localhost:4444",
 )
+# Make celery availble on current_app
+celery = create_celery(flask_app) 
 
-celery = Celery(
-    flask_app.name,
-    backend=flask_app.config["CELERY_RESULT_BACKEND"],
-    broker=flask_app.config["CELERY_BROKER_URL"],
-)
-celery.conf.update(flask_app.config)
 
 from .api import bp as api_bp
 
 flask_app.register_blueprint(api_bp)
+
 
 @flask_app.teardown_appcontext
 def remove_session(*args, **kwags):
